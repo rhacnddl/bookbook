@@ -13,4 +13,4 @@ spring:
     password:
 
 logging.level:
-  org.hibernate.SQL: debug
+  org.hibernate.SQL: trace

@@ -10,16 +10,23 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.util.MultiValueMap;
-import org.springframework.util.MultiValueMapAdapter;
 
+/**
+ * @WebMvcTest
+ * - JPA 기능은 동작하지 않는다.
+ * - 여러 스프링 테스트 어노테이션 중, Web(Spring MVC)에만 집중할 수 있는 어노테이션
+ * - @Controller, @ControllerAdvice 사용 가능
+ * - 단, @Service, @Repository등은 사용할 수 없다.
+ * */
 @WebMvcTest(HelloController.class)
 class HelloControllerTest {
 
     @Autowired
+    /**
+     * 웹 API 테스트할 때 사용
+     * 스프링 MVC 테스트의 시작점
+     * HTTP GET,POST 등에 대해 API 테스트 가능
+     * */
     MockMvc mvc;
 
     @Test
@@ -30,9 +37,10 @@ class HelloControllerTest {
         //when
 
         //then
-        mvc.perform(get("/hello"))
-            .andExpect(status().isOk())
-            .andExpect(content().string(hello));
+        mvc.perform(get("/hello")) //MockMvc를 통해 /hello 주소로 GET 요청
+             //mvc.perform()의 결과를 검증
+            .andExpect(status().isOk()) //200 상태
+            .andExpect(content().string(hello)); //응답 본문의 내용을 검증
     }
 
     @Test
