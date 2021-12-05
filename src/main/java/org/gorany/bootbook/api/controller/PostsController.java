@@ -29,7 +29,7 @@ public class PostsController {
      * @param requestDto
      * @return id
      * */
-    @PostMapping("/")
+    @PostMapping({"/", ""})
     public ResponseEntity<Long> save(@RequestBody PostsSaveRequestDto requestDto) {
         return new ResponseEntity<>(postsService.save(requestDto), HttpStatus.OK);
     }
@@ -52,9 +52,9 @@ public class PostsController {
      * @param requestDto
      * */
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable("id") Long id, @RequestBody PostsUpdateRequestDto requestDto) {
+    public ResponseEntity<Long> update(@PathVariable("id") Long id, @RequestBody PostsUpdateRequestDto requestDto) {
         postsService.update(id, requestDto);
-        return new ResponseEntity<>("success", HttpStatus.OK);
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
     /**
@@ -63,9 +63,9 @@ public class PostsController {
      * @param id
      */
     @DeleteMapping("{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<Long> delete(@PathVariable("id") Long id) {
         postsService.delete(id);
-        return new ResponseEntity<>("success", HttpStatus.OK);
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
 }

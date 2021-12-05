@@ -2,6 +2,7 @@ package org.gorany.bootbook.api.domain.posts;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -43,5 +44,28 @@ class PostsRepositoryTest {
         assertThat(result.get(0).getAuthor()).isEqualTo(author);
         assertThat(result.get(0).getContent()).isEqualTo(content);
         assertThat(result.get(0).getTitle()).isEqualTo(title);
+    }
+
+    @Test
+    @DisplayName("BaseTimeEntity 테스트")
+    void 날짜가_생겼나() throws Exception {
+        //given
+        LocalDateTime now = LocalDateTime.now();
+        String title = "Title";
+        String content = "Content";
+        String author = "gorany@naver.com";
+
+        Posts posts = Posts.builder()
+            .title(title)
+            .content(content)
+            .author(author)
+            .build();
+        //when
+        Posts save = postsRepository.save(posts);
+        em.flush();
+        em.clear();
+        //then
+        assertThat(posts.getCreatedDate()).isAfter(now);
+        assertThat(posts.getModifiedDate()).isAfter(now);
     }
 }
