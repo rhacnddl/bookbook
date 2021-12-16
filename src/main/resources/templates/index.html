@@ -1,16 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="~{/fragments/header :: header}"/>
+  <th:block th:include="~{/fragments/header :: head}"/>
   <meta charset="UTF-8">
   <title>스프링 부트 웹서비스</title>
 </head>
 <body>
-  <h1>스프링 부트로 시작하는 웹 서비스</h1>
+  <header th:replace="~{/fragments/header :: header}"></header>
+  <h1>스프링 부트로 시작하는 웹 서비스 Ver.2</h1>
+  <!-- 로그인 기능 영역 -->
   <div class="col-md-12">
     <div class="row">
       <div class="col-md-6">
         <a th:href="@{/posts/save}" role="button" class="btn btn-primary">글 등록</a>
+        <th:block th:if="${userName != null}">
+          Logged in as: <span id="user" th:text="${userName}"></span>
+          <a th:href="@{/logout}" class="btn btn-info active" role="button">Logout</a>
+        </th:block>
+        <th:block th:if="${userName == null}">
+          <a th:href="@{/oauth2/authorization/google}" class="btn btn-success active" role="button">Google Login</a>
+        <th:block>
       </div>
     </div>
     <br>
