@@ -44,6 +44,7 @@ class PostsRepositoryTest {
         assertThat(result.get(0).getAuthor()).isEqualTo(author);
         assertThat(result.get(0).getContent()).isEqualTo(content);
         assertThat(result.get(0).getTitle()).isEqualTo(title);
+        assertThat(result.get(0).getId()).isNotNull();
     }
 
     @Test

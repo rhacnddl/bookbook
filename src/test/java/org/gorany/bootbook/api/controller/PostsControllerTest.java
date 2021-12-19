@@ -1,6 +1,7 @@
 package org.gorany.bootbook.api.controller;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -9,6 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import org.aspectj.lang.annotation.Before;
 import org.assertj.core.api.Assertions;
 import org.gorany.bootbook.api.domain.posts.Posts;
 import org.gorany.bootbook.api.dto.PostsSaveRequestDto;
@@ -20,13 +23,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Transactional
+@WithMockUser(roles = {"USER"})
 class PostsControllerTest {
+
+    @Autowired
+    WebApplicationContext context;
 
     @Autowired
     ObjectMapper mapper;
@@ -38,6 +49,14 @@ class PostsControllerTest {
     MockMvc mvc;
 
     private static final String BASE_URL = "/api/v1/posts";
+
+    @BeforeEach
+    void init() {
+        mvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
+    }
 
     @Test
     @DisplayName("저장 테스트")
@@ -59,7 +78,7 @@ class PostsControllerTest {
                 .contentType(MediaType.APPLICATION_JSON) //보내는 데이터의 타입을 명시
             )
             .andExpect(status().isOk())
-            .andExpect(content().string("1"));
+            .andExpect(content().string("2"));
     }
 
     @Test
@@ -81,7 +100,7 @@ class PostsControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
             )
             .andExpect(status().isOk())
-            .andExpect(content().string("success"));
+            .andExpect(content().string("1"));
 
         Posts afterResult = em.find(Posts.class, id);
         assertThat(afterResult.getTitle()).isEqualTo(updateTitle);
