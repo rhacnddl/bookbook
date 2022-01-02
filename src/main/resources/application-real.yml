@@ -7,3 +7,5 @@ spring:
         dialect: org.hibernate.dialect.MySQL57Dialect
   session:
     store-type: jdbc
+    jdbc:
+      initialize-schema: always
