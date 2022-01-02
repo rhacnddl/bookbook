@@ -7,9 +7,9 @@ spring:
     jdbc:
       initialize-schema: always
 
-  h2:
-    console:
-      enabled: true
+#  h2:
+#    console:
+#      enabled: true
 
   jpa:
     hibernate:
